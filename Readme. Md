@@ -1,0 +1,43 @@
+# IACT-AEP v1.0: Autonomous Engineering Interface Protocol
+
+**Framework:** Integrative Associative Cognition Theory (IACT)  
+**Architect / Author:** Hussain Salah (ޙުސައިން ޞަލާޙް)  
+**Primary Objective:** Advancing Autonomous Engineering through Integrative Associative Cognition  
+
+---
+
+## 1. Overview & Attribution
+
+The **Integrative Associative Cognition Theory (IACT)** is a conceptual and applied framework authored and developed by **Hussain Salah**. Its primary objective is to advance **Autonomous Engineering**—enabling machines, control protocols, and engineering systems to integrate real-time sensor telemetry, experiential memory, and cross-domain knowledge to make adaptive, safe, and autonomous decisions.
+
+**IACT-AEP v1.0 (Autonomous Engineering Interface Protocol)** is the open, domain-agnostic protocol specification and reference implementation designed to operationalize IACT across autonomous vehicles, marine/aerial systems, robotics, and smart infrastructure.
+
+---
+
+## 2. 5-Layer Autonomous Engineering Control Stack
+
+| Layer | Name | Operational Function |
+| :--- | :--- | :--- |
+| **Layer 1** | **SENSE** (`Sensory & Telemetry Ingestion`) | Standardizes multi-modal sensor streams, environmental telemetry, and context tags. |
+| **Layer 2** | **RECALL** (`Experiential Memory Indexing`) | Retrieves relevant historical patterns and cross-domain engineering principles with context indexing. |
+| **Layer 3** | **SYNTHESIZE** (`Associative Synthesis Engine`) | Combines live telemetry with recalled patterns to generate an adaptive control hypothesis (`synthesized_hypothesis`). |
+| **Layer 4** | **GUARD** (`Validation & Safety Gate`) | Evaluates thermal, power, physical, and confidence thresholds (`safety_gate_passed`) before actuation. |
+| **Layer 5** | **ACTUATE** (`Action & Execution Interface`) | Translates approved hypotheses into physical actuator commands or triggers fail-safe halt protocols. |
+
+---
+
+## 3. Repository Contents
+
+* `README.md` — Protocol documentation, architecture overview, and attribution statement.
+* `iact_aep_v1.py` — Zero-dependency Python reference implementation of the 5-Layer Autonomous Control Loop.
+* `iact_aep_v1.schema.json` — Formal JSON Schema for validating IACT-AEP v1.0 telemetry and control packets.
+* `sample_packet_aep_v1.json` — Example IACT-AEP v1.0 control packet demonstrating an empirical/simulated autonomous cycle.
+
+---
+
+## 4. Quick Start (Python Reference Engine)
+
+Run the standalone reference implementation (requires Python 3.8+, no external dependencies):
+
+```bash
+python iact_aep_v1.py
