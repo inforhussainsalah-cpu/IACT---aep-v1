@@ -1,0 +1,46 @@
+{
+  "protocol": "IACT-AEP",
+  "version": "1.0",
+  "architect": "Hussain Salah",
+  "system_id": "vessel-proto-01",
+  "packet_id": "aep-2026-001",
+  "domain": "autonomous-engineering",
+  "cognitive_state": {
+    "primary_input": {
+      "concept": "Cross-current drift detected during autonomous coastal transit",
+      "sensor_telemetry": {
+        "current_knots": 3.4,
+        "battery_pct": 84,
+        "core_temp_c": 41
+      },
+      "context_tags": ["high_current", "drift", "marine"],
+      "timestamp": "2026-11-20T00:00:00Z"
+    },
+    "associative_memory_links": [
+      {
+        "source_domain": "marine-hydrodynamics",
+        "historical_pattern": "Reduce thruster pitch by 15% and adjust heading +4 deg during cross-current surge",
+        "relevance_score": 0.99
+      }
+    ],
+    "synthesized_hypothesis": {
+      "proposed_action": "EXECUTE_ADAPTIVE_CONTROL: Reduce thruster pitch by 15% and adjust heading +4 deg during cross-current surge",
+      "rationale": "Synthesized from marine-hydrodynamics based on telemetry tags ['high_current', 'drift', 'marine'].",
+      "confidence_index": 0.95,
+      "validation_status": "PENDING_EMPIRICAL_TEST"
+    },
+    "safety_guard": {
+      "safety_gate_passed": true,
+      "checks": {
+        "thermal_safe": true,
+        "power_safe": true,
+        "confidence_threshold_met": true
+      },
+      "status": "APPROVED_FOR_ACTUATION"
+    },
+    "actuation_output": {
+      "execution_state": "ACTIVE",
+      "command": "EXECUTE_ADAPTIVE_CONTROL: Reduce thruster pitch by 15% and adjust heading +4 deg during cross-current surge"
+    }
+  }
+}
