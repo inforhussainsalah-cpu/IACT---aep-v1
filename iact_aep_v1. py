@@ -1,0 +1,154 @@
+
+---
+
+### `iact_aep_v1.py`
+```python
+"""
+IACT-AEP v1.0 (Autonomous Engineering Interface Protocol)
+Reference Implementation & Closed-Loop Control Engine
+Author / Architect: Hussain Salah
+Framework: Integrative Associative Cognition Theory (IACT)
+"""
+
+import json
+import uuid
+from datetime import datetime, timezone
+from typing import Any, Dict, List
+
+
+class IACTAutonomousEngine:
+    """
+    Implements the 5-Layer Autonomous Engineering Control Stack:
+    1. SENSE (Sensory & Telemetry Ingestion)
+    2. RECALL (Experiential Memory Indexing)
+    3. SYNTHESIZE (Associative Synthesis Engine)
+    4. GUARD (Validation & Safety Gate)
+    5. ACTUATE (Action & Execution Interface)
+    """
+
+    def __init__(self, system_id: str = "autonomous-node-01", domain: str = "autonomous-engineering"):
+        self.architect = "Hussain Salah"
+        self.protocol = "IACT-AEP"
+        self.version = "1.0"
+        self.system_id = system_id
+        self.domain = domain
+        self.experiential_memory: List[Dict[str, Any]] = [
+            {
+                "source_domain": "marine-hydrodynamics",
+                "historical_pattern": "Reduce thruster pitch by 15% and adjust heading +4 deg during cross-current surge",
+                "tags": ["high_current", "drift", "marine", "navigation"],
+                "safety_verified": True,
+            },
+            {
+                "source_domain": "aerodynamic-stability",
+                "historical_pattern": "Counteract lateral wind shear using differential thrust stabilization",
+                "tags": ["wind_shear", "turbulence", "aerial", "stability"],
+                "safety_verified": True,
+            },
+            {
+                "source_domain": "structural-load-management",
+                "historical_pattern": "Redistribute actuator load when thermal or mechanical stress exceeds 80%",
+                "tags": ["overload", "thermal", "stress", "actuator"],
+                "safety_verified": True,
+            },
+        ]
+
+    def layer_1_sense(self, concept: str, sensor_telemetry: Dict[str, Any], context_tags: List[str]) -> Dict[str, Any]:
+        return {
+            "concept": concept,
+            "sensor_telemetry": sensor_telemetry,
+            "context_tags": context_tags,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+    def layer_2_recall(self, context_tags: List[str]) -> List[Dict[str, Any]]:
+        links = []
+        input_tags = set(t.lower() for t in context_tags)
+        for item in self.experiential_memory:
+            item_tags = set(t.lower() for t in item["tags"])
+            overlap = input_tags.intersection(item_tags)
+            if overlap:
+                score = round(min(0.99, 0.65 + 0.15 * len(overlap)), 2)
+                links.append({
+                    "source_domain": item["source_domain"],
+                    "historical_pattern": item["historical_pattern"],
+                    "relevance_score": score,
+                })
+        return sorted(links, key=lambda x: x["relevance_score"], reverse=True)
+
+    def layer_3_synthesize(self, primary_input: Dict[str, Any], memory_links: List[Dict[str, Any]]) -> Dict[str, Any]:
+        if not memory_links:
+            return {
+                "proposed_action": "HOLD_POSITION_AND_REQUEST_HUMAN_SUPERVISION",
+                "rationale": "No high-confidence associative memory match found.",
+                "confidence_index": 0.40,
+                "validation_status": "REQUIRES_MANUAL_REVIEW",
+            }
+        top_match = memory_links[0]
+        confidence = round(min(0.98, top_match["relevance_score"] * 0.96), 2)
+        return {
+            "proposed_action": f"EXECUTE_ADAPTIVE_CONTROL: {top_match['historical_pattern']}",
+            "rationale": f"Synthesized from {top_match['source_domain']} based on telemetry tags {primary_input['context_tags']}.",
+            "confidence_index": confidence,
+            "validation_status": "PENDING_EMPIRICAL_TEST",
+        }
+
+    def layer_4_guard(self, hypothesis: Dict[str, Any], telemetry: Dict[str, Any]) -> Dict[str, Any]:
+        critical_temp = telemetry.get("core_temp_c", 25) > 95
+        low_battery = telemetry.get("battery_pct", 100) < 10
+        sufficient_confidence = hypothesis.get("confidence_index", 0) >= 0.75
+
+        safety_gate_passed = (not critical_temp) and (not low_battery) and sufficient_confidence
+        return {
+            "safety_gate_passed": safety_gate_passed,
+            "checks": {
+                "thermal_safe": not critical_temp,
+                "power_safe": not low_battery,
+                "confidence_threshold_met": sufficient_confidence,
+            },
+            "status": "APPROVED_FOR_ACTUATION" if safety_gate_passed else "BLOCKED_BY_SAFETY_GATE",
+        }
+
+    def layer_5_actuate(self, hypothesis: Dict[str, Any], guard_result: Dict[str, Any]) -> Dict[str, Any]:
+        if guard_result["safety_gate_passed"]:
+            return {
+                "execution_state": "ACTIVE",
+                "command": hypothesis["proposed_action"],
+            }
+        return {
+            "execution_state": "FAIL_SAFE_HALT",
+            "command": "ENGAGE_SAFE_MODE_AND_ALERT_OPERATOR",
+        }
+
+    def run_cycle(self, concept: str, sensor_telemetry: Dict[str, Any], context_tags: List[str]) -> Dict[str, Any]:
+        sensed = self.layer_1_sense(concept, sensor_telemetry, context_tags)
+        recalled = self.layer_2_recall(context_tags)
+        synthesized = self.layer_3_synthesize(sensed, recalled)
+        guarded = self.layer_4_guard(synthesized, sensor_telemetry)
+        actuated = self.layer_5_actuate(synthesized, guarded)
+
+        return {
+            "protocol": self.protocol,
+            "version": self.version,
+            "architect": self.architect,
+            "system_id": self.system_id,
+            "packet_id": f"aep-{uuid.uuid4().hex[:8]}",
+            "domain": self.domain,
+            "cognitive_state": {
+                "primary_input": sensed,
+                "associative_memory_links": recalled,
+                "synthesized_hypothesis": synthesized,
+                "safety_guard": guarded,
+                "actuation_output": actuated,
+            },
+        }
+
+
+if __name__ == "__main__":
+    engine = IACTAutonomousEngine(system_id="vessel-proto-01")
+    packet = engine.run_cycle(
+        concept="Cross-current drift detected during autonomous coastal transit",
+        sensor_telemetry={"current_knots": 3.4, "battery_pct": 84, "core_temp_c": 41},
+        context_tags=["high_current", "drift", "marine"],
+    )
+    print(json.dumps(packet, indent=2))
