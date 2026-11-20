@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://iact.mv/schemas/iact-aep-v1.schema.json",
+  "title": "IACT-AEP v1.0 Control Packet Schema",
+  "description": "Schema for Integrative Associative Cognition Theory - Autonomous Engineering Interface Protocol v1.0 by Hussain Salah",
+  "type": "object",
+  "required": ["protocol", "version", "architect", "system_id", "packet_id", "domain", "cognitive_state"],
+  "properties": {
+    "protocol": { "type": "string", "const": "IACT-AEP" },
+    "version": { "type": "string", "const": "1.0" },
+    "architect": { "type": "string", "const": "Hussain Salah" },
+    "system_id": { "type": "string" },
+    "packet_id": { "type": "string" },
+    "domain": { "type": "string" },
+    "cognitive_state": {
+      "type": "object",
+      "required": [
+        "primary_input",
+        "associative_memory_links",
+        "synthesized_hypothesis",
+        "safety_guard",
+        "actuation_output"
+      ],
+      "properties": {
+        "primary_input": {
+          "type": "object",
+          "required": ["concept", "sensor_telemetry", "context_tags"],
+          "properties": {
+            "concept": { "type": "string" },
+            "sensor_telemetry": { "type": "object" },
+            "context_tags": { "type": "array", "items": { "type": "string" } },
+            "timestamp": { "type": "string" }
+          }
+        },
+        "associative_memory_links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source_domain", "historical_pattern", "relevance_score"],
+            "properties": {
+              "source_domain": { "type": "string" },
+              "historical_pattern": { "type": "string" },
+              "relevance_score": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        },
+        "synthesized_hypothesis": {
+          "type": "object",
+          "required": ["proposed_action", "rationale", "confidence_index", "validation_status"],
+          "properties": {
+            "proposed_action": { "type": "string" },
+            "rationale": { "type": "string" },
+            "confidence_index": { "type": "number", "minimum": 0, "maximum": 1 },
+            "validation_status": {
+              "type": "string",
+              "enum": ["PENDING_EMPIRICAL_TEST", "REQUIRES_MANUAL_REVIEW", "VERIFIED"]
+            }
+          }
+        },
+        "safety_guard": {
+          "type": "object",
+          "required": ["safety_gate_passed", "checks", "status"],
+          "properties": {
+            "safety_gate_passed": { "type": "boolean" },
+            "checks": { "type": "object" },
+            "status": { "type": "string" }
+          }
+        },
+        "actuation_output": {
+          "type": "object",
+          "required": ["execution_state", "command"],
+          "properties": {
+            "execution_state": { "type": "string" },
+            "command": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
